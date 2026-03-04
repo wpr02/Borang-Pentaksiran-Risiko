@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borang HIRAC - Kualiti Udara Dalaman JKN Kedah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif; }
+        .table-input { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            outline: none; 
+            resize: vertical;
+            min-height: 40px;
+            font-size: 0.875rem;
+        }
+        .table-input:focus { background-color: #f0fdf4; }
+        th, td { border: 1px solid #d1d5db; padding: 0.5rem; vertical-align: top; }
+        th { background-color: #f3f4f6; font-weight: 600; text-align: center; font-size: 0.75rem; text-transform: uppercase;}
+        
+        .rmn-low { background-color: #86efac; color: #166534; font-weight: bold; text-align: center; transition: all 0.3s;}
+        .rmn-medium { background-color: #fde047; color: #854d0e; font-weight: bold; text-align: center; transition: all 0.3s;}
+        .rmn-high { background-color: #fca5a5; color: #991b1b; font-weight: bold; text-align: center; transition: all 0.3s;}
+
+        /* Custom scrollbar for details content */
+        details > div::-webkit-scrollbar { width: 6px; }
+        details > div::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        @media print {
+            body { font-size: 10pt; padding: 0; background: white; }
+            .no-print { display: none !important; }
+            .container { max-width: 100%; margin: 0; padding: 0; border: none; box-shadow: none; }
+            .overflow-x-auto { overflow: visible; }
+            input, textarea, select { border: none !important; appearance: none; background: transparent; -webkit-appearance: none; resize: none; overflow: hidden; }
+            th { background-color: #e5e7eb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .rmn-low, .rmn-medium, .rmn-high { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            table { page-break-inside: auto; width: 100%; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+
+<div class="container mx-auto max-w-full bg-white shadow-lg rounded-lg border border-gray-200 p-6">
+    
+    <div class="flex justify-between items-start border-b pb-4 mb-6 no-print">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Borang Pentaksiran Risiko (HIRAC)</h1>
+            <p class="text-sm text-gray-500">Berdasarkan Laporan Ekstensif IAQ di JKN Kedah</p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="clearForm()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Kosongkan Borang
+            </button>
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Cetak / Simpan PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Header Section (Company Info) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-sm">
+        <!-- Maklumat Lokasi -->
+        <div class="space-y-2">
+            <div class="flex"><span class="w-40 font-semibold">JABATAN / BAHAGIAN:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" value="Jabatan Kesihatan Negeri Kedah"></div>
+            <div class="flex"><span class="w-40 font-semibold">PROSES:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" value="Operasi Pejabat & Pengurusan Fasiliti"></div>
+            <div class="flex"><span class="w-40 font-semibold">LOKASI:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" value="BKA I, BKA II, Pengurusan, Perubatan & AHU"></div>
+            <div class="flex"><span class="w-40 font-semibold">TARIKH PENTAKSIRAN:</span> <input type="date" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" value="2025-05-10"></div>
+            <div class="flex"><span class="w-40 font-semibold">PENTAKSIRAN TERAKHIR:</span> <input type="date" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" value=""></div>
+        </div>
+
+        <!-- Pentaksir Risiko -->
+        <div class="space-y-2" id="teamMembersContainer">
+            <div class="font-semibold mb-1 flex items-center justify-between">
+                <span>PENTAKSIR RISIKO:</span>
+                <button onclick="addTeamMember()" class="no-print bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-2 py-1 rounded shadow-sm transition" type="button">+ Tambah Ahli</button>
+            </div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 1:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 1"></div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 2:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 2"></div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 3:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 3"></div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 4:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 4"></div>
+        </div>
+
+        <!-- Diluluskan Oleh -->
+        <div class="space-y-2">
+            <div class="font-semibold mb-1">DILULUSKAN OLEH:</div>
+            <div class="flex"><span class="w-24">T.Tangan:</span> <div class="border-b border-gray-300 flex-1"></div></div>
+            <div class="flex"><span class="w-24">Nama:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pelulus"></div>
+            <div class="flex"><span class="w-24">Jawatan:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Pengarah / Ketua"></div>
+            <div class="flex"><span class="w-24">Tarikh:</span> <input type="date" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent"></div>
+            <div class="flex mt-2 pt-2"><span class="w-24 font-bold text-red-600">NO. RUJUKAN:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent font-bold" value="HIRAC/JKNK/IAQ/2025-01"></div>
+        </div>
+    </div>
+
+    <!-- Expandable Guide Section (No Print) -->
+    <details class="mb-6 bg-blue-50 border border-blue-200 rounded-lg no-print group">
+        <summary class="font-semibold text-blue-800 cursor-pointer p-4 flex items-center justify-between list-none">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Panduan Mengisi Borang HIRAC (Berdasarkan DOSH / JKN)</span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </summary>
+        <div class="p-4 pt-0 text-sm text-blue-900 border-t border-blue-200 overflow-y-auto max-h-96">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Langkah 1 -->
+                <div>
+                    <h3 class="font-bold border-b border-blue-300 pb-1 mb-2 text-blue-950">Langkah 1: Pengenalpastian Hazard</h3>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><b>Aktiviti Kerja:</b> Nyatakan tugas atau proses (contoh: Operasi sistem penyaman udara).</li>
+                        <li><b>Hazard:</b> Punca yang berpotensi mencederakan/memudaratkan pekerja (contoh: Kualiti udara terjejas, kulat).</li>
+                        <li><b>Pengelasan Hazard:</b> Pilih klasifikasi yang tepat: Fizikal, Kimia, Biologikal, Ergonomik, atau Psikososial.</li>
+                        <li><b>Peristiwa & Akibat:</b> Apa yang akan terjadi jika pekerja terdedah kepada hazard tersebut (contoh: Jangkitan paru-paru, asma).</li>
+                    </ul>
+                </div>
+                <!-- Langkah 2 -->
+                <div>
+                    <h3 class="font-bold border-b border-blue-300 pb-1 mb-2 text-blue-950">Langkah 2: Penilaian Risiko</h3>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><b>Kemungkinan / Likelihood (L):</b><br> 
+                            1 (Sangat Jarang), 2 (Jarang), 3 (Mungkin), 4 (Kerap), 5 (Paling Kerap).</li>
+                        <li><b>Keterukan / Severity (S):</b><br>
+                            1 (Calar sikit/Pengabaian), 2 (Kecederaan ringan), 3 (Sederhana/MC), 4 (Kecederaan Teruk/Kecacatan), 5 (Maut/Bencana).</li>
+                        <li><b>Nombor Matriks Risiko (RMN):</b> Dikira secara automatik (L x S).<br>
+                            <span class="inline-block px-1 bg-green-200 text-green-800 rounded mt-1">1 - 4: Rendah</span> (Boleh diterima)<br>
+                            <span class="inline-block px-1 bg-yellow-200 text-yellow-800 rounded mt-1">5 - 14: Sederhana</span> (Langkah kawalan munasabah)<br>
+                            <span class="inline-block px-1 bg-red-200 text-red-800 rounded mt-1">15 - 25: Tinggi</span> (Tindakan segera diwajibkan)
+                        </li>
+                    </ul>
+                </div>
+                <!-- Langkah 3 -->
+                <div>
+                    <h3 class="font-bold border-b border-blue-300 pb-1 mb-2 text-blue-950">Langkah 3: Kawalan Risiko & Tindakan</h3>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><b>Kawalan Sedia Ada:</b> Langkah yang sedang diamalkan sekarang.</li>
+                        <li><b>Kawalan Tambahan:</b> Rancang berdasarkan <span class="italic">Hierarki Kawalan</span> (Penghapusan &rarr; Penggantian &rarr; Kawalan Kejuruteraan &rarr; Kawalan Pentadbiran &rarr; PPE).</li>
+                        <li><b>Penilaian Semula (L x S):</b> Sasarkan RMN yang lebih rendah selepas kawalan tambahan.</li>
+                        <li><b>Tanggungjawab (PIC) & Tarikh:</b> Nyatakan jawatan individu yang diamanahkan dan tarikh siap (due date).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </details>
+
+    <!-- HIRAC Table Section -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[1500px]" id="hiracTable">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="w-8">No.</th>
+                    <th colspan="3" class="bg-blue-100 border-blue-200">PENGENALPASTIAN HAZARD</th>
+                    <th colspan="5" class="bg-orange-100 border-orange-200">PENILAIAN RISIKO</th>
+                    <th colspan="1" class="bg-indigo-100 border-indigo-200">KAWALAN RISIKO</th>
+                    <th colspan="3" class="bg-green-100 border-green-200">PENILAIAN SEMULA RISIKO</th>
+                    <th colspan="2" class="bg-gray-100">TINDAKAN & CATATAN</th>
+                </tr>
+                <tr>
+                    <th class="w-48 bg-blue-50">Aktiviti Kerja</th>
+                    <th class="w-48 bg-blue-50">Hazard</th>
+                    <th class="w-28 bg-blue-50">Pengelasan Hazard</th>
+                    <th class="w-48 bg-orange-50">Peristiwa dan Akibat</th>
+                    <th class="w-48 bg-orange-50">Kawalan Risiko Sedia Ada</th>
+                    <th class="w-12 bg-orange-50" title="Likelihood">L</th>
+                    <th class="w-12 bg-orange-50" title="Severity">S</th>
+                    <th class="w-16 bg-orange-50" title="Risk Matrix Number">RMN</th>
+                    <th class="w-56 bg-indigo-50">Kawalan Risiko Tambahan</th>
+                    <th class="w-12 bg-green-50" title="Likelihood">L</th>
+                    <th class="w-12 bg-green-50" title="Severity">S</th>
+                    <th class="w-16 bg-green-50" title="Risk Matrix Number">RMN</th>
+                    <th class="w-32 bg-gray-50">Tanggungjawab (Tarikh)</th>
+                    <th class="w-32 bg-gray-50">Catatan</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                
+                <!-- ROW 1 -->
+                <tr class="hover:bg-gray-50 transition-colors group main-row">
+                    <td class="text-center font-bold relative row-num" rowspan="1">
+                        <span>1</span>
+                        <button onclick="deleteRow(this)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Baris Utama"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                    </td>
+                    <td class="row-activity relative" rowspan="1">
+                        <textarea class="table-input h-24">Bekerja di dalam ruang pejabat bertutup (BKA I & Unit UIP).</textarea>
+                        <div class="mt-1 text-right no-print">
+                            <button onclick="addSubRow(this)" class="text-[10px] font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded border border-blue-200 shadow-sm transition-colors">+ Tambah Hazard</button>
+                        </div>
+                    </td>
+                    <td class="relative"><textarea class="table-input h-24">Ketidakseimbangan aliran HVAC; halaju udara rendah (<0.15 m/s) dan pengumpulan CO2 (>1000 ppm).</textarea></td>
+                    <td>
+                        <select class="table-input font-semibold text-xs">
+                            <option value="Fizikal" selected>Fizikal</option>
+                            <option value="Kimia">Kimia</option>
+                            <option value="Biologikal">Biologikal</option>
+                            <option value="Ergonomik">Ergonomik</option>
+                            <option value="Psikososial">Psikososial</option>
+                        </select>
+                    </td>
+                    <td><textarea class="table-input h-24">Sindrom Bangunan Sakit (SBS), sakit kepala, kelesuan, penurunan prestasi analisis akibat kekurangan oksigen.</textarea></td>
+                    <td class="align-top">
+                        <div class="controls-container">
+                            <div class="relative group control-item">
+                                <textarea class="table-input h-24">Penggunaan kipas angin peribadi (mengganggu dinamik aliran laminar asal).</textarea>
+                                <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-right no-print">
+                            <button onclick="addControl(this)" class="text-[10px] font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 py-1 px-2 rounded border border-orange-200 shadow-sm transition-colors">+ Tambah Kawalan</button>
+                        </div>
+                    </td>
+                    <td><select class="table-input text-center risk-factor pre-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor pre-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="pre-rmn text-center align-middle text-lg">12</td>
+                    <td><textarea class="table-input h-24">1. Lantik pakar HVAC jalankan Ujian, Penyelarasan & Pengimbangan (TAB).
+2. Ubah semula posisi perabot yang halang diffuser.
+3. Selaraskan peredam (balancing damper).</textarea></td>
+                    <td><select class="table-input text-center risk-factor post-l" onchange="calcRow(this)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor post-s" onchange="calcRow(this)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="post-rmn text-center align-middle text-lg">4</td>
+                    <td><textarea class="table-input h-24">Jurutera Fasiliti (Bulan depan)</textarea></td>
+                    <td><textarea class="table-input h-24">Tindakan proaktif (predictive maintenance).</textarea></td>
+                </tr>
+
+                <!-- ROW 2 -->
+                <tr class="hover:bg-gray-50 transition-colors group main-row">
+                    <td class="text-center font-bold relative row-num" rowspan="1">
+                        <span>2</span>
+                        <button onclick="deleteRow(this)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Baris Utama"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                    </td>
+                    <td class="row-activity relative" rowspan="1">
+                        <textarea class="table-input h-28">Operasi sistem penyaman udara berpusat di Bilik AHU.</textarea>
+                        <div class="mt-1 text-right no-print">
+                            <button onclick="addSubRow(this)" class="text-[10px] font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded border border-blue-200 shadow-sm transition-colors">+ Tambah Hazard</button>
+                        </div>
+                    </td>
+                    <td class="relative"><textarea class="table-input h-28">Pemasangan penapis udara longgar menyebabkan fenomena "Air Bypass". Habuk PM10 dan spora tidak tertapis.</textarea></td>
+                    <td>
+                        <select class="table-input font-semibold text-xs">
+                            <option value="Fizikal">Fizikal</option>
+                            <option value="Kimia">Kimia</option>
+                            <option value="Biologikal">Biologikal</option>
+                            <option value="Fizikal/Biologikal" selected>Fizikal & Biologikal</option>
+                        </select>
+                    </td>
+                    <td><textarea class="table-input h-28">Zarah melepasi sistem, melekat pada gegelung penyejuk. Menyebabkan pendedahan PM10 (asma, radang bronkial) & kerosakan mekanikal AHU.</textarea></td>
+                    <td class="align-top">
+                        <div class="controls-container">
+                            <div class="relative group control-item">
+                                <textarea class="table-input h-28">Pemasangan kartrij penapis gantian (tidak mengikut spesifikasi ketat).</textarea>
+                                <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-right no-print">
+                            <button onclick="addControl(this)" class="text-[10px] font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 py-1 px-2 rounded border border-orange-200 shadow-sm transition-colors">+ Tambah Kawalan</button>
+                        </div>
+                    </td>
+                    <td><select class="table-input text-center risk-factor pre-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor pre-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="pre-rmn text-center align-middle text-lg">12</td>
+                    <td><textarea class="table-input h-28">1. Pasang gasket / getah neoprena keliling rangka modul penapis.
+2. Ketatkan klip pengunci.
+3. Pasang tolok tekanan perbezaan (differential pressure manometer).</textarea></td>
+                    <td><select class="table-input text-center risk-factor post-l" onchange="calcRow(this)"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor post-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="post-rmn text-center align-middle text-lg">3</td>
+                    <td><textarea class="table-input h-28">Kontraktor Penyelenggara</textarea></td>
+                    <td><textarea class="table-input h-28">Bersihkan diffuser yang sedia kotor guna HEPA.</textarea></td>
+                </tr>
+
+                <!-- ROW 3 -->
+                <tr class="hover:bg-gray-50 transition-colors group main-row">
+                    <td class="text-center font-bold relative row-num" rowspan="1">
+                        <span>3</span>
+                        <button onclick="deleteRow(this)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Baris Utama"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                    </td>
+                    <td class="row-activity relative" rowspan="1">
+                        <textarea class="table-input h-32">Bekerja di pejabat bersebelahan Bilik Server / laluan saluran kondensat AHU yang limpah.</textarea>
+                        <div class="mt-1 text-right no-print">
+                            <button onclick="addSubRow(this)" class="text-[10px] font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded border border-blue-200 shadow-sm transition-colors">+ Tambah Hazard</button>
+                        </div>
+                    </td>
+                    <td class="relative"><textarea class="table-input h-32">Pemeluwapan dinding (Thermal Bridging) & tumpahan kondensat membiakkan Koloni Kulat Hitam (Stachybotrys chartarum).</textarea></td>
+                    <td>
+                        <select class="table-input font-semibold text-xs">
+                            <option value="Fizikal">Fizikal</option>
+                            <option value="Kimia">Kimia</option>
+                            <option value="Biologikal" selected>Biologikal</option>
+                            <option value="Ergonomik">Ergonomik</option>
+                            <option value="Psikososial">Psikososial</option>
+                        </select>
+                    </td>
+                    <td><textarea class="table-input h-32">Pelepasan mikotoksin & bioaerosol. Menyebabkan alahan pernafasan, hidung tersumbat, dan simptom hipersensitiviti akut.</textarea></td>
+                    <td class="align-top">
+                        <div class="controls-container">
+                            <div class="relative group control-item">
+                                <textarea class="table-input h-32">Tiada kawalan berkesan sedia ada.</textarea>
+                                <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-right no-print">
+                            <button onclick="addControl(this)" class="text-[10px] font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 py-1 px-2 rounded border border-orange-200 shadow-sm transition-colors">+ Tambah Kawalan</button>
+                        </div>
+                    </td>
+                    <td><select class="table-input text-center risk-factor pre-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor pre-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></td>
+                    <td class="pre-rmn text-center align-middle text-lg">16</td>
+                    <td><textarea class="table-input h-32">1. Pasang penebat haba (closed-cell insulation) pada dinding server.
+2. Baiki U-trap paip kondensat AHU & turap kalis air.
+3. Nyahkuman kawasan kulat dengan cecair peluntur/peroksida (Pakai mask N-95).</textarea></td>
+                    <td><select class="table-input text-center risk-factor post-l" onchange="calcRow(this)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor post-s" onchange="calcRow(this)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="post-rmn text-center align-middle text-lg">4</td>
+                    <td><textarea class="table-input h-32">Unit Pengurusan Fasiliti</textarea></td>
+                    <td><textarea class="table-input h-32">Sisa gipsum/karpet rosak dibuang terus.</textarea></td>
+                </tr>
+
+                <!-- ROW 4 -->
+                <tr class="hover:bg-gray-50 transition-colors group main-row">
+                    <td class="text-center font-bold relative row-num" rowspan="1">
+                        <span>4</span>
+                        <button onclick="deleteRow(this)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Baris Utama"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                    </td>
+                    <td class="row-activity relative" rowspan="1">
+                        <textarea class="table-input h-28">Operasi mencetak berskala besar di ruang stesen kerja awam (BKA I).</textarea>
+                        <div class="mt-1 text-right no-print">
+                            <button onclick="addSubRow(this)" class="text-[10px] font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded border border-blue-200 shadow-sm transition-colors">+ Tambah Hazard</button>
+                        </div>
+                    </td>
+                    <td class="relative"><textarea class="table-input h-28">Pelepasan Ozon (O3) radikal dan Sebatian Organik Meruap (VOC) dari mesin fotostat/toner panas.</textarea></td>
+                    <td>
+                        <select class="table-input font-semibold text-xs">
+                            <option value="Fizikal">Fizikal</option>
+                            <option value="Kimia" selected>Kimia</option>
+                            <option value="Biologikal">Biologikal</option>
+                            <option value="Ergonomik">Ergonomik</option>
+                            <option value="Psikososial">Psikososial</option>
+                        </select>
+                    </td>
+                    <td><textarea class="table-input h-28">Penyedutan Ozon mendatangkan kerengsaan mata/paru-paru. VOC (Benzena, Formaldehid) menyebabkan pening dan toksisiti jangka panjang.</textarea></td>
+                    <td class="align-top">
+                        <div class="controls-container">
+                            <div class="relative group control-item">
+                                <textarea class="table-input h-28">Penempatan terbuka di kawasan pekerja, bergantung pada pengudaraan awam.</textarea>
+                                <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-right no-print">
+                            <button onclick="addControl(this)" class="text-[10px] font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 py-1 px-2 rounded border border-orange-200 shadow-sm transition-colors">+ Tambah Kawalan</button>
+                        </div>
+                    </td>
+                    <td><select class="table-input text-center risk-factor pre-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor pre-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="pre-rmn text-center align-middle text-lg">12</td>
+                    <td><textarea class="table-input h-28">1. Pindahkan mesin fotostat berkapasiti tinggi ke bilik khusus dengan "exhaust fan" khusus.
+2. Sediakan SOP penyelenggaraan (tukar filter karbon mesin secara berkala).</textarea></td>
+                    <td><select class="table-input text-center risk-factor post-l" onchange="calcRow(this)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td><select class="table-input text-center risk-factor post-s" onchange="calcRow(this)"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    <td class="post-rmn text-center align-middle text-lg">4</td>
+                    <td><textarea class="table-input h-28">Bahagian Pentadbiran</textarea></td>
+                    <td><textarea class="table-input h-28">Memerlukan kelulusan peruntukan fasiliti.</textarea></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <!-- Add Main Row Button -->
+        <div class="mt-4 flex justify-end no-print">
+            <button onclick="addMainRow()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 transition-colors text-sm font-semibold">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                Tambah Aktiviti (Baris Utama)
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // === Calculation Logic ===
+    function getRiskClass(rmn) {
+        if (rmn >= 15) return 'rmn-high';
+        if (rmn >= 5) return 'rmn-medium';
+        return 'rmn-low';
+    }
+
+    function calcRow(selectElem) {
+        const tr = selectElem.closest('tr');
+        
+        // Pre-Risk Calculation
+        const preL = parseInt(tr.querySelector('.pre-l').value) || 1;
+        const preS = parseInt(tr.querySelector('.pre-s').value) || 1;
+        const preRmnCell = tr.querySelector('.pre-rmn');
+        const preRmn = preL * preS;
+        preRmnCell.textContent = preRmn;
+        preRmnCell.className = `pre-rmn text-center align-middle text-lg ${getRiskClass(preRmn)}`;
+
+        // Post-Risk Calculation
+        const postL = parseInt(tr.querySelector('.post-l').value) || 1;
+        const postS = parseInt(tr.querySelector('.post-s').value) || 1;
+        const postRmnCell = tr.querySelector('.post-rmn');
+        const postRmn = postL * postS;
+        postRmnCell.textContent = postRmn;
+        postRmnCell.className = `post-rmn text-center align-middle text-lg ${getRiskClass(postRmn)}`;
+    }
+
+    // === Row Management Logic ===
+    function updateRowNumbers() {
+        const rows = document.querySelectorAll('#tableBody > tr.main-row');
+        rows.forEach((row, index) => {
+            const numCell = row.querySelector('.row-num');
+            if (numCell) {
+                const span = numCell.querySelector('span');
+                if (span) span.textContent = index + 1;
+            }
+        });
+    }
+
+    function addMainRow() {
+        const tbody = document.getElementById('tableBody');
+        const newRow = document.createElement('tr');
+        newRow.className = 'hover:bg-gray-50 transition-colors group main-row';
+        
+        newRow.innerHTML = `
+            <td class="text-center font-bold relative row-num" rowspan="1">
+                <span>-</span>
+                <button onclick="deleteRow(this)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Baris Utama"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+            </td>
+            <td class="row-activity relative" rowspan="1">
+                <textarea class="table-input h-24" placeholder="Aktiviti Kerja Baru"></textarea>
+                <div class="mt-1 text-right no-print">
+                    <button onclick="addSubRow(this)" class="text-[10px] font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded border border-blue-200 shadow-sm transition-colors">+ Tambah Hazard</button>
+                </div>
+            </td>
+            <td class="relative"><textarea class="table-input h-24" placeholder="Penerangan Hazard"></textarea></td>
+            <td>
+                <select class="table-input font-semibold text-xs">
+                    <option value="Fizikal">Fizikal</option>
+                    <option value="Kimia">Kimia</option>
+                    <option value="Biologikal">Biologikal</option>
+                    <option value="Ergonomik">Ergonomik</option>
+                    <option value="Psikososial">Psikososial</option>
+                </select>
+            </td>
+            <td><textarea class="table-input h-24"></textarea></td>
+            <td class="align-top">
+                <div class="controls-container">
+                    <div class="relative group control-item">
+                        <textarea class="table-input h-24" placeholder="Kawalan Sedia Ada..."></textarea>
+                        <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                    </div>
+                </div>
+                <div class="mt-2 text-right no-print">
+                    <button onclick="addControl(this)" class="text-[10px] font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 py-1 px-2 rounded border border-orange-200 shadow-sm transition-colors">+ Tambah Kawalan</button>
+                </div>
+            </td>
+            <td><select class="table-input text-center risk-factor pre-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td><select class="table-input text-center risk-factor pre-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td class="pre-rmn text-center align-middle text-lg"></td>
+            <td><textarea class="table-input h-24"></textarea></td>
+            <td><select class="table-input text-center risk-factor post-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td><select class="table-input text-center risk-factor post-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td class="post-rmn text-center align-middle text-lg"></td>
+            <td><textarea class="table-input h-24"></textarea></td>
+            <td><textarea class="table-input h-24"></textarea></td>
+        `;
+        tbody.appendChild(newRow);
+        updateRowNumbers();
+        calcRow(newRow.querySelector('.pre-l'));
+    }
+
+    function addSubRow(btn) {
+        const currentRow = btn.closest('tr');
+        const isMainRow = currentRow.classList.contains('main-row');
+        
+        let mainRow = currentRow;
+        if (!isMainRow) {
+            let prev = currentRow.previousElementSibling;
+            while(prev && !prev.classList.contains('main-row')) {
+                prev = prev.previousElementSibling;
+            }
+            if(prev) mainRow = prev;
+        }
+
+        // Increase rowspan
+        const numCell = mainRow.querySelector('.row-num');
+        const activityCell = mainRow.querySelector('.row-activity');
+        let currentSpan = parseInt(numCell.getAttribute('rowspan')) || 1;
+        numCell.setAttribute('rowspan', currentSpan + 1);
+        activityCell.setAttribute('rowspan', currentSpan + 1);
+
+        // Create Sub Row
+        const newRow = document.createElement('tr');
+        newRow.className = 'hover:bg-gray-50 transition-colors group sub-row border-t-0';
+        
+        newRow.innerHTML = `
+            <td class="relative">
+                <textarea class="table-input h-24" placeholder="Hazard Baru..."></textarea>
+                <button onclick="deleteSubRow(this)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Sub-Hazard"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+            </td>
+            <td>
+                <select class="table-input font-semibold text-xs">
+                    <option value="Fizikal">Fizikal</option>
+                    <option value="Kimia">Kimia</option>
+                    <option value="Biologikal">Biologikal</option>
+                    <option value="Ergonomik">Ergonomik</option>
+                    <option value="Psikososial">Psikososial</option>
+                </select>
+            </td>
+            <td><textarea class="table-input h-24"></textarea></td>
+            <td class="align-top">
+                <div class="controls-container">
+                    <div class="relative group control-item">
+                        <textarea class="table-input h-24" placeholder="Kawalan Sedia Ada..."></textarea>
+                        <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                    </div>
+                </div>
+                <div class="mt-2 text-right no-print">
+                    <button onclick="addControl(this)" class="text-[10px] font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 py-1 px-2 rounded border border-orange-200 shadow-sm transition-colors">+ Tambah Kawalan</button>
+                </div>
+            </td>
+            <td><select class="table-input text-center risk-factor pre-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td><select class="table-input text-center risk-factor pre-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td class="pre-rmn text-center align-middle text-lg"></td>
+            <td><textarea class="table-input h-24"></textarea></td>
+            <td><select class="table-input text-center risk-factor post-l" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td><select class="table-input text-center risk-factor post-s" onchange="calcRow(this)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+            <td class="post-rmn text-center align-middle text-lg"></td>
+            <td><textarea class="table-input h-24"></textarea></td>
+            <td><textarea class="table-input h-24"></textarea></td>
+        `;
+        
+        let insertAfterRow = currentRow;
+        while (insertAfterRow.nextElementSibling && insertAfterRow.nextElementSibling.classList.contains('sub-row')) {
+            insertAfterRow = insertAfterRow.nextElementSibling;
+        }
+        insertAfterRow.after(newRow);
+        calcRow(newRow.querySelector('.pre-l'));
+    }
+
+    function deleteRow(btn) {
+        if(!confirm('Adakah anda pasti mahu memadam aktiviti ini dan semua hazard di dalamnya?')) return;
+        const tr = btn.closest('tr');
+        if (tr.classList.contains('main-row')) {
+            let next = tr.nextElementSibling;
+            while (next && next.classList.contains('sub-row')) {
+                let toDelete = next;
+                next = next.nextElementSibling;
+                toDelete.remove();
+            }
+            tr.remove();
+            updateRowNumbers();
+        }
+    }
+
+    function deleteSubRow(btn) {
+        if(!confirm('Padam hazard ini?')) return;
+        const tr = btn.closest('tr');
+        let prev = tr.previousElementSibling;
+        while(prev && !prev.classList.contains('main-row')) {
+            prev = prev.previousElementSibling;
+        }
+        if (prev) {
+            const numCell = prev.querySelector('.row-num');
+            const activityCell = prev.querySelector('.row-activity');
+            let currentSpan = parseInt(numCell.getAttribute('rowspan')) || 2;
+            numCell.setAttribute('rowspan', currentSpan - 1);
+            activityCell.setAttribute('rowspan', currentSpan - 1);
+        }
+        tr.remove();
+    }
+
+    // === Team Member Logic ===
+    function addTeamMember() {
+        const container = document.getElementById('teamMembersContainer');
+        const currentCount = container.querySelectorAll('.team-member-row').length;
+        const newRow = document.createElement('div');
+        newRow.className = 'flex team-member-row relative group';
+        newRow.innerHTML = `
+            <span class="w-32">Ahli Kumpulan ${currentCount + 1}:</span> 
+            <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir ${currentCount + 1}">
+            <button onclick="this.parentElement.remove()" class="absolute -right-6 text-red-400 hover:text-red-600 hidden group-hover:block no-print text-sm font-bold" title="Buang Ahli">X</button>
+        `;
+        container.appendChild(newRow);
+    }
+
+    // === Control Management Logic ===
+    function addControl(btn) {
+        const container = btn.closest('td').querySelector('.controls-container');
+        const newItem = document.createElement('div');
+        newItem.className = 'relative group control-item mt-2 pt-2 border-t border-dashed border-gray-300';
+        newItem.innerHTML = `
+            <textarea class="table-input h-16" placeholder="Kawalan Sedia Ada (Baru)..."></textarea>
+            <button onclick="this.parentElement.remove()" class="absolute top-3 right-1 text-red-400 hover:text-red-600 hidden group-hover:block no-print bg-white rounded" title="Buang Kawalan"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+        `;
+        container.appendChild(newItem);
+    }
+
+    // === Clear Form Logic ===
+    function clearForm() {
+        if (!confirm('Adakah anda pasti mahu mengosongkan keseluruhan borang? Semua rekod akan dipadam dan tidak boleh dikembalikan.')) {
+            return;
+        }
+
+        // Kosongkan semua input teks di bahagian maklumat (Header)
+        document.querySelectorAll('.grid input').forEach(input => {
+            input.value = '';
+        });
+
+        // Reset ahli kumpulan kepada 4 baris kosong
+        const teamContainer = document.getElementById('teamMembersContainer');
+        teamContainer.innerHTML = `
+            <div class="font-semibold mb-1 flex items-center justify-between">
+                <span>PENTAKSIR RISIKO:</span>
+                <button onclick="addTeamMember()" class="no-print bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-2 py-1 rounded shadow-sm transition" type="button">+ Tambah Ahli</button>
+            </div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 1:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 1"></div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 2:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 2"></div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 3:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 3"></div>
+            <div class="flex team-member-row relative group"><span class="w-32">Ahli Kumpulan 4:</span> <input type="text" class="border-b border-gray-300 flex-1 focus:outline-none focus:border-blue-500 bg-transparent" placeholder="Nama Pentaksir 4"></div>
+        `;
+
+        // Buang semua baris dalam jadual dan tambah 1 baris utama yang baru
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        addMainRow();
+    }
+
+    // === Initialize Setup ===
+    window.addEventListener('DOMContentLoaded', () => {
+        // Trigger calculation on all existing rows when loaded
+        document.querySelectorAll('.risk-factor.pre-l').forEach(el => calcRow(el));
+        updateRowNumbers();
+    });
+</script>
+
+</body>
+</html>
